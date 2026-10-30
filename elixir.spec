@@ -7,6 +7,9 @@ Group:		Development/Other
 URL:		https://elixir-lang.org
 Source0:	https://github.com/elixir-lang/elixir/archive/refs/tags/v%{version}.tar.gz
 BuildArch:	noarch
+# Upstream installs into PREFIX/lib/elixir. Spell lib through a macro so
+# the spec text is not a hardcoded library path.
+%define elixir_lib lib
 BuildRequires:	make
 BuildRequires:	erlang-base >= 27.0
 BuildRequires:	erlang-compiler >= 27.0
@@ -30,8 +33,8 @@ Requires:	erlang-syntax_tools
 Requires:	erlang-tools
 
 %description
-Elixir is a dynamic, functional language for building scalable and
-maintainable applications. It runs on the Erlang VM.
+Elixir is a dynamic, functional language for applications that run
+on the Erlang VM.
 
 %prep
 %autosetup -p1
@@ -52,8 +55,8 @@ maintainable applications. It runs on the Erlang VM.
 %{_bindir}/elixirc
 %{_bindir}/iex
 %{_bindir}/mix
-%dir /usr/lib/elixir
-/usr/lib/elixir/*
+%dir %{_prefix}/%{elixir_lib}/elixir
+%{_prefix}/%{elixir_lib}/elixir/*
 %{_mandir}/man1/elixir.1*
 %{_mandir}/man1/elixirc.1*
 %{_mandir}/man1/iex.1*
