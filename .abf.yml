@@ -1,2 +1,3 @@
 sources:
   v1.20.5.tar.gz: 9d798b1d38e5793b5ab9cfe13fe0c3657c921088
+  elixir-1.20.5-port-line-flush.patch: 920d1372728b2c5b0127334000a7bd76263fc98d

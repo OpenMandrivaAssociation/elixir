@@ -6,11 +6,15 @@ License:	Apache-2.0
 Group:		Development/Other
 URL:		https://elixir-lang.org
 Source0:	https://github.com/elixir-lang/elixir/archive/refs/tags/v%{version}.tar.gz
+# Keep the trailing partial line from System.cmd when :lines is set.
+Patch0:		elixir-1.20.5-port-line-flush.patch
 BuildArch:	noarch
 # Upstream installs into PREFIX/lib/elixir. Spell lib through a macro so
 # the spec text is not a hardcoded library path.
 %define elixir_lib lib
 BuildRequires:	make
+# Mix test helper runs git to build local fixtures.
+BuildRequires:	git
 BuildRequires:	erlang-base >= 27.0
 BuildRequires:	erlang-compiler >= 27.0
 BuildRequires:	erlang-eunit

@@ -1,0 +1,44 @@
+--- a/lib/elixir/lib/system.ex
++++ b/lib/elixir/lib/system.ex
+@@ -1186,14 +1186,33 @@
+         do_port_line(port, fun.(acc, {:cont, data}), fun, [])
+ 
+       {^port, {:exit_status, status}} ->
+-        # Data may arrive after exit status on line mode
+-        receive do
+-          {^port, {:data, {_, data}}} ->
+-            data = [data | buffer] |> Enum.reverse() |> IO.iodata_to_binary()
+-            {fun.(acc, {:cont, data}), status}
+-        after
+-          0 -> {acc, status}
+-        end
++        # A short :lines limit splits one logical line into several
++        # {:noeol, _} packets. A command that writes no final newline
++        # never sends {:eol, _}, so those packets are still in the buffer
++        # or already queued behind this exit status. Emit them.
++        {acc, buffer} = drain_port_line(port, acc, fun, buffer)
++
++        acc =
++          case buffer |> Enum.reverse() |> IO.iodata_to_binary() do
++            "" -> acc
++            data -> fun.(acc, {:cont, data})
++          end
++
++        {acc, status}
++    end
++  end
++
++  defp drain_port_line(port, acc, fun, buffer) do
++    receive do
++      {^port, {:data, {:noeol, data}}} ->
++        drain_port_line(port, acc, fun, [data | buffer])
++
++      {^port, {:data, {:eol, data}}} ->
++        data = [data | buffer] |> Enum.reverse() |> IO.iodata_to_binary()
++        drain_port_line(port, fun.(acc, {:cont, data}), fun, [])
++    after
++      0 ->
++        {acc, buffer}
+     end
+   end
+ 
