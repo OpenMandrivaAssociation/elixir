@@ -13,6 +13,7 @@ BuildArch:	noarch
 BuildRequires:	make
 BuildRequires:	erlang-base >= 27.0
 BuildRequires:	erlang-compiler >= 27.0
+BuildRequires:	erlang-eunit
 BuildRequires:	erlang-asn1
 BuildRequires:	erlang-crypto
 BuildRequires:	erlang-inets
