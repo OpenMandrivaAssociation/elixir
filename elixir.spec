@@ -20,8 +20,10 @@ BuildRequires:	erlang-compiler >= 27.0
 BuildRequires:	erlang-eunit
 # Test suite only. RecordTest reads xmerl/include/xmerl.hrl.
 # DialyzerTest calls :dialyzer.run/1.
+# Mix profile and release tests load the runtime_tools application.
 BuildRequires:	erlang-xmerl
 BuildRequires:	erlang-dialyzer
+BuildRequires:	erlang-runtime_tools
 BuildRequires:	erlang-asn1
 BuildRequires:	erlang-crypto
 BuildRequires:	erlang-inets
