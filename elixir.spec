@@ -14,6 +14,10 @@ BuildRequires:	make
 BuildRequires:	erlang-base >= 27.0
 BuildRequires:	erlang-compiler >= 27.0
 BuildRequires:	erlang-eunit
+# Test suite only. RecordTest reads xmerl/include/xmerl.hrl.
+# DialyzerTest calls :dialyzer.run/1.
+BuildRequires:	erlang-xmerl
+BuildRequires:	erlang-dialyzer
 BuildRequires:	erlang-asn1
 BuildRequires:	erlang-crypto
 BuildRequires:	erlang-inets
