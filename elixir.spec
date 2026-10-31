@@ -57,13 +57,13 @@ on the Erlang VM.
 %make install DESTDIR=%{buildroot} PREFIX=%{_prefix}
 
 %check
-# File.cd!/2 changes the working directory for the whole VM. The mix
-# suite calls it from many tests at once. On aarch64 that race deletes
-# the working directory and the rest of the suite fails. noarch, so this
-# cannot be an arch conditional in the spec.
+# On aarch64, ExUnit's default parallelism loses the VM working
+# directory in the mix suite (File.cd!/2 is global) and also trips
+# the registry lock timeout. The package is noarch, so pick this
+# with uname instead of an arch conditional.
 case $(uname -m) in
 aarch64)
-	sed -i 's/ExUnit.start(ex_unit_opts)/ExUnit.start(Keyword.put(ex_unit_opts, :max_cases, 1))/' lib/mix/test/test_helper.exs
+	find lib -name test_helper.exs -exec sed -i 's/ExUnit.start(ex_unit_opts)/ExUnit.start(Keyword.put(ex_unit_opts, :max_cases, 1))/' {} +
 	;;
 esac
 %make test
